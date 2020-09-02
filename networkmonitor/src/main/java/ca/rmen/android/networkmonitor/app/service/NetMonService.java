@@ -39,7 +39,7 @@ import android.util.Log;
 import androidx.core.content.ContextCompat;
 import ca.rmen.android.networkmonitor.Constants;
 import ca.rmen.android.networkmonitor.app.dbops.backend.clean.DBPurge;
-import ca.rmen.android.networkmonitor.app.email.ReportEmailer;
+//JRN disable // import ca.rmen.android.networkmonitor.app.email.ReportEmailer;
 import ca.rmen.android.networkmonitor.app.prefs.NetMonPreferences;
 import ca.rmen.android.networkmonitor.app.prefs.PreferencesMigrator;
 import ca.rmen.android.networkmonitor.app.service.datasources.NetMonDataSources;
@@ -57,7 +57,7 @@ public class NetMonService extends Service {
     private PowerManager mPowerManager;
     private long mLastWakeUp = 0;
     private NetMonDataSources mDataSources;
-    private ReportEmailer mReportEmailer;
+    //JRN disable // private ReportEmailer mReportEmailer;
     private Scheduler mScheduler;
 
     public static void start(Context context) {
@@ -84,7 +84,7 @@ public class NetMonService extends Service {
         mDataSources = new NetMonDataSources();
         mDataSources.onCreate(this);
 
-        mReportEmailer = new ReportEmailer(this);
+        //JRN disable // mReportEmailer = new ReportEmailer(this);
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(mSharedPreferenceListener);
 
@@ -171,7 +171,7 @@ public class NetMonService extends Service {
                 new DBPurge(NetMonService.this, prefs.getDBRecordCount()).execute(null);
 
                 // Send mail
-                mReportEmailer.send();
+                //JRN disable // mReportEmailer.send();
 
             } catch (Throwable t) {
                 Log.v(TAG, "Error in monitorLoop: " + t.getMessage(), t);

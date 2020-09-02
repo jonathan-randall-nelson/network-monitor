@@ -40,7 +40,7 @@ import android.util.Log;
 
 import ca.rmen.android.networkmonitor.Constants;
 import ca.rmen.android.networkmonitor.R;
-import ca.rmen.android.networkmonitor.app.email.EmailPreferencesActivity;
+//JRN disable //import ca.rmen.android.networkmonitor.app.email.EmailPreferencesActivity;
 import ca.rmen.android.networkmonitor.app.log.LogActivity;
 import ca.rmen.android.networkmonitor.app.main.MainActivity;
 import ca.rmen.android.networkmonitor.app.prefs.NetMonPreferences;
@@ -124,8 +124,8 @@ public class NetMonNotification {
     }
 
     public static void showEmailFailureNotification(Context context) {
-        showAlertNotification(context, NOTIFICATION_ID_FAILED_EMAIL, R.string.warning_notification_ticker_email_failed,
-                R.string.warning_notification_message_email_failed, EmailPreferencesActivity.class);
+        //JRN disable //showAlertNotification(context, NOTIFICATION_ID_FAILED_EMAIL, R.string.warning_notification_ticker_email_failed,
+        //JRN disable //        R.string.warning_notification_message_email_failed, EmailPreferencesActivity.class);
     }
 
     public static void dismissEmailFailureNotification(Context context) {
