@@ -42,6 +42,7 @@ import ca.rmen.android.networkmonitor.app.dbops.backend.clean.DBPurge;
 //JRN disable // import ca.rmen.android.networkmonitor.app.email.ReportEmailer;
 import ca.rmen.android.networkmonitor.app.prefs.NetMonPreferences;
 import ca.rmen.android.networkmonitor.app.prefs.PreferencesMigrator;
+import ca.rmen.android.networkmonitor.app.service.datasources.CellSignalStrengthDataSource;
 import ca.rmen.android.networkmonitor.app.service.datasources.NetMonDataSources;
 import ca.rmen.android.networkmonitor.app.service.scheduler.Scheduler;
 import ca.rmen.android.networkmonitor.provider.NetMonColumns;
@@ -53,6 +54,8 @@ public class NetMonService extends Service {
     private static final String TAG = Constants.TAG + NetMonService.class.getSimpleName();
 
     private static final int PERIODIC_WAKEUP_WAKELOCK_TIMEOUT_MS = 5000;
+
+    private static CellSignalStrengthDataSource mCellDataSource = null;
 
     private PowerManager mPowerManager;
     private long mLastWakeUp = 0;
@@ -82,6 +85,8 @@ public class NetMonService extends Service {
 
         // Prepare our data sources
         mDataSources = new NetMonDataSources();
+        mCellDataSource = (CellSignalStrengthDataSource)(mDataSources.getSourceByClass(CellSignalStrengthDataSource.class));
+
         mDataSources.onCreate(this);
 
         //JRN disable // mReportEmailer = new ReportEmailer(this);
@@ -172,8 +177,10 @@ public class NetMonService extends Service {
 
                 // Send mail
                 //JRN disable // mReportEmailer.send();
+                final long lLostSignalAlertInterval = 1000L * 60*5; //5min
+                if(mCellDataSource != null && mCellDataSource.getMillisSinceZero() >= lLostSignalAlertInterval){
 
-                if(mDataSources.)
+                }
 
             } catch (Throwable t) {
                 Log.v(TAG, "Error in monitorLoop: " + t.getMessage(), t);

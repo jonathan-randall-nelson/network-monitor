@@ -51,6 +51,7 @@ public class NetMonNotification {
     private static final String ACTION_DISABLE = PREFIX + "ACTION_DISABLE";
     private static final int NOTIFICATION_ID_FAILED_EMAIL = 456;
     private static final int NOTIFICATION_ID_FAILED_TEST = 567;
+    private static final int NOTIFICATION_ID_LOST_SIGNAL = 678;
     static final int NOTIFICATION_ID_ONGOING = 1;
 
     /**
@@ -150,6 +151,22 @@ public class NetMonNotification {
         }
     }
 
+    //TODO: convert to using NOTIFICATION_ID_LOST_SIGNAL //JRN
+    public static void showLostSignalNotification(Context context) {
+        // Only show this notification if the preference is set to enabled.
+        if (NetMonPreferences.getInstance(context).getShowNotificationOnTestFailure()) {
+            showAlertNotification(context, NOTIFICATION_ID_LOST_SIGNAL, R.string.warning_notification_ticker_test_failed,
+                    R.string.warning_notification_message_test_failed, LogActivity.class);
+        }
+    }
+
+    public static void dismissLostSignalTestNotification(Context context) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.cancel(NOTIFICATION_ID_LOST_SIGNAL);
+        }
+    }
+
     /**
      * Shows a notification with the given ticker text and content text. The icon is a warning icon, and the notification title is the app name. Tapping on the
      * notification opens the given activity.
@@ -169,8 +186,11 @@ public class NetMonNotification {
         builder.setSound(uri);
         builder.setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, activityClass), PendingIntent.FLAG_UPDATE_CURRENT));
         Notification notification = builder.build();
-        // JRN: would rather use FLAG_INSISTENT
-        notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
+        // JRN
+        if(NOTIFICATION_ID_LOST_SIGNAL == notificationId)
+            notification.flags |= Notification.FLAG_INSISTENT;
+        else
+            notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             //noinspection deprecation
             notification.flags |= Notification.FLAG_SHOW_LIGHTS;

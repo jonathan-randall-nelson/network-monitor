@@ -106,7 +106,7 @@ public class CellSignalStrengthDataSource implements NetMonDataSource {
             return mDebounceInterval;
     }
 
-    private long getMillisSinceZero(){
+    public long getMillisSinceZero(){
         long currentTime = System.currentTimeMillis();
         if(timeWhenStrengthZero==NEVER_WENT_ZERO){
             return 0;

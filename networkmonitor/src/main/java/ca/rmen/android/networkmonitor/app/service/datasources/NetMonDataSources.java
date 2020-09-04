@@ -35,7 +35,8 @@ import ca.rmen.android.networkmonitor.app.service.NetMonService;
 import java8.util.stream.StreamSupport;
 
 /**
- * Maintains the list of {@link NetMonDataSource}s. For now, the list of available data sources is hardcoded in this class. {@link NetMonService} has a
+ * Maintains the list of {@link NetMonDataSource}s. For now, the list of available data sources is hardcoded in this class.
+ * {@link NetMonService} has a
  * reference to this class, which delegates the data retrieval to the individual data sources.
  */
 public class NetMonDataSources {
@@ -78,6 +79,16 @@ public class NetMonDataSources {
                 Log.e(TAG, "NetMonDataSources Could not create a " + clazz + ": " + e.getMessage(), e);
             }
         }
+    }
+
+    // since the list of sources may not always be hardcoded, look up by class
+    public NetMonDataSource getSourceByClass(Class aClass){
+        NetMonDataSource lRetVal = null;
+        for(NetMonDataSource classCursor : mSources){
+            if (classCursor!=null && aClass!= null && classCursor.getClass() == aClass)
+                lRetVal = classCursor;
+        }
+        return lRetVal;
     }
 
     /**
