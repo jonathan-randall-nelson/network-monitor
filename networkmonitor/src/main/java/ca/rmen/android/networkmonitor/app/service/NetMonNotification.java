@@ -153,6 +153,7 @@ public class NetMonNotification {
     /**
      * Shows a notification with the given ticker text and content text. The icon is a warning icon, and the notification title is the app name. Tapping on the
      * notification opens the given activity.
+     * //JRN!
      */
     private static void showAlertNotification(Context context, int notificationId, int tickerTextId, int contentTextId, Class<?> activityClass) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -168,6 +169,7 @@ public class NetMonNotification {
         builder.setSound(uri);
         builder.setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, activityClass), PendingIntent.FLAG_UPDATE_CURRENT));
         Notification notification = builder.build();
+        // JRN: would rather use FLAG_INSISTENT
         notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             //noinspection deprecation

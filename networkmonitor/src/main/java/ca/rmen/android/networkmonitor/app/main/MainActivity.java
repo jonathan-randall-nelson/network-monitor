@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // use the 'preferences.xml' layout
         mPreferenceFragment = NetMonPreferenceFragmentCompat.newInstance(R.xml.preferences);
         getSupportFragmentManager().
                 beginTransaction().

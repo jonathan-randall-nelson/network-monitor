@@ -74,7 +74,7 @@ public class AdvancedPreferencesActivity extends AppCompatActivity implements Co
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         // The first time the user sees the notification preferences, we'll set the ringtone preference
-        // to the default notification ringtone.
+        // to the default notification ringtone. //JRN!
         if (!sharedPrefs.contains(NetMonPreferences.PREF_NOTIFICATION_RINGTONE)) NetMonPreferences.getInstance(this).setDefaultNotificationSoundUri();
 
         PreferenceManager.setDefaultValues(this, R.xml.adv_preferences, false);

@@ -41,7 +41,8 @@ import ca.rmen.android.networkmonitor.util.NetMonSignalStrength;
  */
 public class CellSignalStrengthDataSource implements NetMonDataSource {
     private static final String TAG = Constants.TAG + CellSignalStrengthDataSource.class.getSimpleName();
-
+    private static final long NEVER_WENT_ZERO = -9999;
+    private volatile long timeWhenStrengthZero = NEVER_WENT_ZERO;
     private NetMonSignalStrength mNetMonSignalStrength;
     private volatile int mLastSignalStrength;
     private volatile int mLastSignalStrengthDbm;
@@ -77,7 +78,7 @@ public class CellSignalStrengthDataSource implements NetMonDataSource {
     public ContentValues getContentValues() {
         Log.v(TAG, "getContentValues");
         ContentValues values = new ContentValues(5);
-        values.put(NetMonColumns.CELL_SIGNAL_STRENGTH, mLastSignalStrength);
+        values.put(NetMonColumns.CELL_SIGNAL_STRENGTH, mLastSignalStrength);//JRN!
         if (mLastSignalStrengthDbm != NetMonSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN)
             values.put(NetMonColumns.CELL_SIGNAL_STRENGTH_DBM, mLastSignalStrengthDbm);
         values.put(NetMonColumns.CELL_ASU_LEVEL, mLastAsuLevel);
@@ -89,15 +90,50 @@ public class CellSignalStrengthDataSource implements NetMonDataSource {
         return values;
     }
 
+    private void transitionToZero(){
+        timeWhenStrengthZero = System.currentTimeMillis();
+    }
+
+    private void notZero(){
+        timeWhenStrengthZero = NEVER_WENT_ZERO;
+    }
+
+    private static long  mDebounceInterval = 1000L; /// be default, debounce to nearest second
+    public static long getDebounceInterval (){
+        if(mDebounceInterval==0L)
+            return 1L;
+        else
+            return mDebounceInterval;
+    }
+
+    private long getMillisSinceZero(){
+        long currentTime = System.currentTimeMillis();
+        if(timeWhenStrengthZero==NEVER_WENT_ZERO){
+            return 0;
+        }
+        else {
+            return getDebounceInterval() *( (currentTime - timeWhenStrengthZero)/getDebounceInterval());
+        }
+    }
+
     private final PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+            int lLastSignalStrength = mLastSignalStrength;
             Log.v(TAG, "onSignalStrengthsChanged: " + signalStrength);
             mLastSignalStrength = mNetMonSignalStrength.getLevel(signalStrength);
             mLastSignalStrengthDbm = mNetMonSignalStrength.getDbm(signalStrength);
             mLastAsuLevel = mNetMonSignalStrength.getAsuLevel(signalStrength);
             mLastBer = signalStrength.getGsmBitErrorRate();
             //mLastEvdoEcio = signalStrength.getEvdoEcio();
+
+            // if we have just transitioned, update timer
+            if(lLastSignalStrength !=0 && mLastSignalStrength ==0){
+                transitionToZero();
+            }
+            if(lLastSignalStrength==0 && mLastSignalStrength !=0){
+                notZero();
+            }
             if (Build.VERSION.SDK_INT >= 17) mLastLteRsrq = mNetMonSignalStrength.getLteRsrq(signalStrength);
         }
 

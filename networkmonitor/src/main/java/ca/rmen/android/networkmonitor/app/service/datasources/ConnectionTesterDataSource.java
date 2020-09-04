@@ -121,7 +121,7 @@ public class ConnectionTesterDataSource implements NetMonDataSource {
         values.put(NetMonColumns.HTTP_CONNECTION_TEST, httpTestResult.name());
         if ((socketTestResult == NetworkTestResult.FAIL || httpTestResult == NetworkTestResult.FAIL) && shouldHaveDataConnection()) {
             Log.v(TAG, "A connection test failed even though we expect to have a data connection");
-            NetMonNotification.showFailedTestNotification(mContext);
+            NetMonNotification.showFailedTestNotification(mContext); //JRN
         } else {
             NetMonNotification.dismissFailedTestNotification(mContext);
         }

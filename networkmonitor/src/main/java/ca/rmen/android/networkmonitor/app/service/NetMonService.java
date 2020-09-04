@@ -173,6 +173,8 @@ public class NetMonService extends Service {
                 // Send mail
                 //JRN disable // mReportEmailer.send();
 
+                if(mDataSources.)
+
             } catch (Throwable t) {
                 Log.v(TAG, "Error in monitorLoop: " + t.getMessage(), t);
             } finally {

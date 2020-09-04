@@ -240,6 +240,7 @@ public class NetMonSignalStrength {
 
     /**
      * Get LTE as level 0..4
+     * //JRN! look here, find where this goes
      */
     private int getLteLevel(SignalStrength signalStrength) {
         Log.v(TAG, "getLteLevel " + signalStrength);
