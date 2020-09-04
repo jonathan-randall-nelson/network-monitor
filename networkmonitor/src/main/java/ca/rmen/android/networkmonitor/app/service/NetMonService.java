@@ -43,6 +43,7 @@ import ca.rmen.android.networkmonitor.app.dbops.backend.clean.DBPurge;
 import ca.rmen.android.networkmonitor.app.prefs.NetMonPreferences;
 import ca.rmen.android.networkmonitor.app.prefs.PreferencesMigrator;
 import ca.rmen.android.networkmonitor.app.service.datasources.CellSignalStrengthDataSource;
+import ca.rmen.android.networkmonitor.app.service.datasources.ConnectionTesterDataSource;
 import ca.rmen.android.networkmonitor.app.service.datasources.NetMonDataSources;
 import ca.rmen.android.networkmonitor.app.service.scheduler.Scheduler;
 import ca.rmen.android.networkmonitor.provider.NetMonColumns;
@@ -179,7 +180,8 @@ public class NetMonService extends Service {
                 //JRN disable // mReportEmailer.send();
                 final long lLostSignalAlertInterval = 1000L * 60*5; //5min
                 if(mCellDataSource != null && mCellDataSource.getMillisSinceZero() >= lLostSignalAlertInterval){
-
+                    //TODO: convert to using NOTIFICATION_ID_LOST_SIGNAL //JRN
+                         NetMonNotification.showLostSignalNotification(mCellDataSource.getContext()); //JRN
                 }
 
             } catch (Throwable t) {

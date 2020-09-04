@@ -59,6 +59,10 @@ public class ConnectionTesterDataSource implements NetMonDataSource {
     private static final String TAG = Constants.TAG + ConnectionTesterDataSource.class.getSimpleName();
     private Context mContext;
 
+    public Context getContext() {
+        return mContext;
+    }
+
     private enum NetworkTestResult {
         PASS, FAIL, SLOW
     }

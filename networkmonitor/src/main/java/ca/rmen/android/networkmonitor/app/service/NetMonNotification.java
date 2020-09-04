@@ -148,14 +148,19 @@ public class NetMonNotification {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
             notificationManager.cancel(NOTIFICATION_ID_FAILED_TEST);
+            notificationManager.cancel(NOTIFICATION_ID_LOST_SIGNAL);
         }
+    }
+
+    public static void showLostSignalNotification(){
+        showLostSignalNotification(ConnectionTesterDataSource.getContext());
     }
 
     //TODO: convert to using NOTIFICATION_ID_LOST_SIGNAL //JRN
     public static void showLostSignalNotification(Context context) {
         // Only show this notification if the preference is set to enabled.
         if (NetMonPreferences.getInstance(context).getShowNotificationOnTestFailure()) {
-            showAlertNotification(context, NOTIFICATION_ID_LOST_SIGNAL, R.string.warning_notification_ticker_test_failed,
+            showAlertNotification(context, NOTIFICATION_ID_FAILED_TEST, R.string.warning_notification_ticker_test_failed,
                     R.string.warning_notification_message_test_failed, LogActivity.class);
         }
     }
@@ -187,10 +192,10 @@ public class NetMonNotification {
         builder.setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, activityClass), PendingIntent.FLAG_UPDATE_CURRENT));
         Notification notification = builder.build();
         // JRN
-        if(NOTIFICATION_ID_LOST_SIGNAL == notificationId)
+        //if(NOTIFICATION_ID_LOST_SIGNAL == notificationId)
             notification.flags |= Notification.FLAG_INSISTENT;
-        else
-            notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
+//        else
+//            notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             //noinspection deprecation
             notification.flags |= Notification.FLAG_SHOW_LIGHTS;
